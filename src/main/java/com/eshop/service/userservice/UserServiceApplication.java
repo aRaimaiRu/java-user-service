@@ -1,5 +1,6 @@
 package com.eshop.service.userservice;
 
+import com.eshop.common_lib.constant.RoleEnum;
 import com.eshop.service.userservice.model.Role;
 import com.eshop.service.userservice.repository.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -25,8 +26,11 @@ public class UserServiceApplication {
 	CommandLineRunner runner(RoleRepository roleRepository)
 	{
 		return args -> {
-			if (roleRepository.findByName("ROLE_USER").isEmpty()) {
-				roleRepository.save(Role.builder().name("ROLE_USER").build());
+			RoleEnum[] roles = RoleEnum.values();
+			for (RoleEnum role : roles) {
+				if (roleRepository.findByName(role).isEmpty()) {
+					roleRepository.save(Role.builder().name(role).build());
+				}
 			}
 		};
 	}

@@ -1,5 +1,6 @@
 package com.eshop.service.userservice.model;
 
+import com.eshop.common_lib.constant.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(unique = true)
-    private String name;
+    private RoleEnum name;
 
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore // to prevent infinite recursion

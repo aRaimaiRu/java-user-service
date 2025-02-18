@@ -1,5 +1,6 @@
 package com.eshop.service.userservice.model;
 
+import com.eshop.common_lib.constant.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -63,17 +64,12 @@ public class User implements UserDetails, Principal {
     @Column(nullable = false, updatable = false)
     private LocalDateTime lastModifiedDate;
 
-//    @Enumerated(EnumType.STRING)
-//    private Role role;
-
-//    @OneToMany(mappedBy = "user")
-//    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .toList();
     }
 
     @Override

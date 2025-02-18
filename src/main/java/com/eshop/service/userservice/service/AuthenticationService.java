@@ -1,9 +1,11 @@
 package com.eshop.service.userservice.service;
 
+import com.eshop.common_lib.constant.RoleEnum;
 import com.eshop.service.userservice.dto.AuthenticationRequest;
 import com.eshop.service.userservice.dto.AuthenticationResponse;
 import com.eshop.service.userservice.dto.RegisterRequest;
 import com.eshop.service.userservice.exception.*;
+import com.eshop.service.userservice.model.Role;
 import com.eshop.service.userservice.model.Token;
 import com.eshop.service.userservice.model.User;
 import com.eshop.service.userservice.repository.RoleRepository;
@@ -39,7 +41,8 @@ public class AuthenticationService {
     private String confirmationUrl;
 
     public void register(RegisterRequest registerRequest) throws MessagingException {
-        var userRole = roleRepository.findByName("ROLE_USER").orElseThrow(() -> new RoleNotFoundException());
+        var userRole = roleRepository.findByName(RoleEnum.USER).orElseThrow(() -> new RoleNotFoundException());
+        List<Role> roles = List.of(userRole);
         Optional<User> existUser = userRepository.findByEmail(registerRequest.getEmail());
         if (existUser.isPresent()) {
             throw new UserAlreadyExistException("User already exists");
@@ -51,7 +54,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .accountLocked(false)
                 .enabled(false)
-                .roles(List.of(userRole))
+                .roles(roles)
                 .build();
         userRepository.save(user);
         sendValidationEmail(user);
