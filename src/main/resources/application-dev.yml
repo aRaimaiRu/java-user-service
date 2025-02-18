@@ -1,46 +1,70 @@
 spring:
-    datasource:
-        url: jdbc:postgresql://localhost:5432/eshop
-        username: username
-        password: password
-        driver-class-name: org.postgresql.Driver
-    jpa:
-        hibernate:
-            ddl-auto: create-drop
-        show-sql: false
-        properties:
-            hibernate:
-                format_sql: true
-            transaction:
-                jta:
-                    platform: org.hibernate.service.jta.platform.internal.BitronixJtaPlatform
-        database: postgresql
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
-        open-in-view: false
-    mail:
-        host: localhost
-        port: 1025
-        username: maildev
-        password: maildev
-        protocol: smtp
-        properties:
-            mail:
-                smtp:
-                    trust: "*"
-                auth: true
-                starttls:
-                    enable: false
-                connectiontimeout: 5000
-                timeout: 3000
-                writetimeout: 5000
+  datasource:
+    url: jdbc:postgresql://localhost:5432/eshop
+    username: username
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+      transaction:
+        jta:
+          platform: org.hibernate.service.jta.platform.internal.BitronixJtaPlatform
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+  security:
+    user:
+      name: user
+      password: password
+    oauth2:
+      authorizationserver:
+        client:
+          oidc-client:
+            registration:
+              client-id: "oidc-client"
+              client-secret: "{noop}secret"
+              client-authentication-methods:
+                - "client_secret_basic"
+              authorization-grant-types:
+                - "authorization_code"
+                - "refresh_token"
+              redirect-uris:
+                - "http://127.0.0.1:8080/login/oauth2/code/oidc-client"
+              post-logout-redirect-uris:
+                - "http://127.0.0.1:8080/"
+              scopes:
+                - "openid"
+                - "profile"
+            require-authorization-consent: true
+  mail:
+    host: localhost
+    port: 1025
+    username: maildev
+    password: maildev
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enable: false
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
 
 application:
-    security:
-        jwt:
-            secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-            expiration: 86400000 # a day
-            refresh-token:
-                expiration: 604800000 # 7 days
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
 Server:
-    port: 8088
-    url: http://localhost:8088
+  port: 8088
+  url: http://localhost:8088
