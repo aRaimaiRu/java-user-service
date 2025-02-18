@@ -11,8 +11,12 @@ spring:
         properties:
             hibernate:
                 format_sql: true
+            transaction:
+                jta:
+                    platform: org.hibernate.service.jta.platform.internal.BitronixJtaPlatform
         database: postgresql
         database-platform: org.hibernate.dialect.PostgreSQLDialect
+        open-in-view: false
     mail:
         host: localhost
         port: 1025
