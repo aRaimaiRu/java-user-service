@@ -70,11 +70,6 @@ public class User implements UserDetails, Principal {
                 .map(Role::getAuthorities)
                 .flatMap(Collection::stream)
                 .toList();
-
-//        return this.roles.stream().flatMap(role -> role.getAuthorities().stream())
-//                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-//                .collect(Collectors.toList());
-
     }
 
     @Override

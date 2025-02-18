@@ -41,10 +41,16 @@ public class AuthenticationService {
     private String confirmationUrl;
 
     public void register(RegisterRequest registerRequest) throws MessagingException {
-        var userRole = roleRepository.findByName(RoleEnum.USER).orElseThrow(() -> new RoleNotFoundException());
-        List<Role> roles = List.of(userRole);
-        Optional<User> existUser = userRepository.findByEmail(registerRequest.getEmail());
-        if (existUser.isPresent()) {
+        registerUser(registerRequest, RoleEnum.USER);
+    }
+
+    public void registerAdmin(RegisterRequest registerRequest) throws MessagingException {
+        registerUser(registerRequest, RoleEnum.ADMIN);
+    }
+
+    private void registerUser(RegisterRequest registerRequest, RoleEnum roleEnum) throws MessagingException {
+        var userRole = roleRepository.findByName(roleEnum).orElseThrow(RoleNotFoundException::new);
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             throw new UserAlreadyExistException("User already exists");
         }
         var user = User.builder()
@@ -53,8 +59,8 @@ public class AuthenticationService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .accountLocked(false)
-                .enabled(true)
-                .roles(roles)
+                .enabled(true) // set to false if email verification is required
+                .roles(List.of(userRole))
                 .build();
         userRepository.save(user);
         sendValidationEmail(user);

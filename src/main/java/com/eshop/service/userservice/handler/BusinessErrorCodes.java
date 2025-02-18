@@ -8,12 +8,12 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_IMPLEMENTED;
 
 public enum BusinessErrorCodes {
-    NO_CODE(0, NOT_IMPLEMENTED, "No code"),
-    INCORRECT_CURRENT_PASSWORD(300, BAD_REQUEST, "Current password is incorrect"),
-    NEW_PASSWORD_DOES_NOT_MATCH(301, BAD_REQUEST, "The new password does not match"),
-    ACCOUNT_LOCKED(302, FORBIDDEN, "User account is locked"),
-    ACCOUNT_DISABLED(303, FORBIDDEN, "User account is disabled"),
-    BAD_CREDENTIALS(304, FORBIDDEN, "Login and / or Password is incorrect"),
+    INCORRECT_CURRENT_PASSWORD(BAD_REQUEST.value(), BAD_REQUEST, "Current password is incorrect"),
+    NEW_PASSWORD_DOES_NOT_MATCH(BAD_REQUEST.value(), BAD_REQUEST, "The new password does not match"),
+    ACCOUNT_LOCKED(FORBIDDEN.value(), FORBIDDEN, "User account is locked"),
+    ACCOUNT_DISABLED(FORBIDDEN.value(), FORBIDDEN, "User account is disabled"),
+    BAD_CREDENTIALS(FORBIDDEN.value(), FORBIDDEN, "Login and / or Password is incorrect"),
+    AUTHORIZATION_DENIED(FORBIDDEN.value(), FORBIDDEN, "Authorization denied"),
     ;
 
     @Getter

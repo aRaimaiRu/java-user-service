@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -149,6 +150,19 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .validationErrors(errors)
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ExceptionResponse> handleException(AuthorizationDeniedException exp) {
+        return ResponseEntity
+                .status(AUTHORIZATION_DENIED.getCode())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(AUTHORIZATION_DENIED.getCode())
+                                .businessErrorDescription(AUTHORIZATION_DENIED.getDescription())
+                                .error(exp.getMessage())
                                 .build()
                 );
     }
